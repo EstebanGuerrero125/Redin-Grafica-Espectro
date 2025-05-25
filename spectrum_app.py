@@ -4,6 +4,8 @@ import numpy as np
 import io
 import base64
 import math
+#pip install FLask
+#pip install matplotlib
 
 app = Flask(__name__)
 
