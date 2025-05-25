@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import io
 import base64
-
+import math
 
 app = Flask(__name__)
 
@@ -47,7 +47,7 @@ def generar_grafica():
     k = 1.38*10**-23 #onstante de Boltzmann
     #noise_floor = 10 * math.log10(k*temperatura*Bw) + 30 # en dBm
     noise_floor = 10 * np.log10(k * temperatura * Bw) + 30
-
+    pisoRuidoTrunc = math.trunc(noise_floor)
     colors = ['red', 'green', 'blue']
 
     # rango de frecuencia
@@ -64,10 +64,13 @@ def generar_grafica():
     np.random.seed(42)
     noise = noise_floor + np.random.normal(0, 0.5, size=frequencies.shape)
 
+
     # grafico
     plt.figure(figsize=(12, 6))
+    plt.plot(frequencies, noise, color='gray', label=f"Piso de Ruido: {pisoRuidoTrunc}")
 
     max_p_max = 0
+
     for idx, s in enumerate(signals):
         max_p_max = max(max_p_max,s["power"])
         power = longitud_signal(frequencies, s["fc"], s["bw"], s["power"])
